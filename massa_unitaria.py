@@ -28,7 +28,6 @@ class Leiras():
     
     def volume_leiras(self):
         """Retorna a capacidade total volumétrica das leiras."""
-        import math
         volume_total = self.volume * self.quantidade
         return volume_total
 
