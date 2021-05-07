@@ -29,7 +29,6 @@ class Leiras():
     def volume_leiras(self):
         """Retorna a capacidade total volumétrica das leiras."""
         import math
-        area_leira = (math.pi * pow(self.diametro, 2))/4
         volume_total = self.volume * self.quantidade
         return volume_total
 
