@@ -1,11 +1,18 @@
-""" Cálculo da Capacidade de Produção de uma Usina de Beneficiamento de Resíduos.
-Dados obtidos:
-    Leiras de Resíduos Bruto:
-        volume_bruto = 21.65m³; diâmetro_bruto = 6.8m; quantidade_bruto = 14
-    Leiras de Resíduos Beneficiado:
-        volume_beneficiado = 107.8m³; diâmetro_beneficiado = 11.8m; quantidade_beneficiado = 5
-    densidade_aparente_média (RSD) = 1.20 t/m³; capacidade de produção do britador = 100 t/h
-    jornada de trabalho de 8h/dia.
+""" Observe atentamente os dados do projeto e escreva um algorítmo (MEMORIAL DE CÁLCULO) que calcule:
+    a) a capacidade de armazenamento total de resíduos brutos e de resíduos beneficiados;
+    b) a altura que deverá ter cada pilha de resíduos bruto e beneficiados;
+    c) o volume de reíduos beneficiados produzidos em 1 hora de trabalho;
+    d) o volume de resíduos beneficiados em um jornada de trabalho;
+    d) o tempo necessário para que se tenha todas as pilhas de resíduos beneficiados totalmente preenchidas.
+    DADOS:
+    A usina deverá conter:
+        - 14 pilhas para armazenar os Resíduos Bruto, cada pilha deverá ter diâmetro = 6.8m e capacidade volumétrica = 21.65m³;
+        - 05 pilhas para armazenar os Resíduos Beneficiados, cada pilha deverá ter diâmetro = 11.8 m e capacidade volumétrica = 107.8m³;
+        - será utilizado um britador com capacidade de produção horária = 100 t/h (considere que serão produzidas 100t de resíudos beneficiados por hora);
+        - considere que a massa unitária do material produzido será mu = 1.2 t/m³;
+        - considere uma jornada de trabalho de 8h/dia.
+    Ao fim do memorial escreva um pequeno relatório dos dados obtidos;
+    Considerando que o serviço durará 5 dias de trabalho (5 jornadas) qual ou quais solução (numérica) você adotaria para não parar a produção? 
 """
 
 # Leiras de armazenamento de resíduos bruto de geometria cilindrica:
@@ -32,18 +39,24 @@ class Leiras():
         area_leira = (math.pi * pow(self.diametro, 2))/4
         altura_leira = self.volume/area_leira
         return altura_leira
-class Britador():
-    """Tentativa de criar um britador."""
-    def __init__(self, producao, densidade, jornada):
+class Britador(Leiras):
+    """Tentativa de criar uma classe filha referente a um britador."""
+    def __init__(self, quantidade, diametro, volume):
         """Retorna a capacidade de produção do britador."""
         self.producao = producao
         self.densidade = densidade
         self.jornada = jornada
     def producao_britador(self):
+        """Exibe a produção do britador em horas e numa jornada de trabalho."""
         volume_hora = (self.producao/self.densidade)
         volume_jornada = volume_hora * self.jornada
-        print('Em uma hora de trabalho serão produzidos ' + str(volume_hora) + 'm³ de resíduos beneficiados;')
-        print('Ao final de uma jornada de trabalho serão produzidos ' + str(volume_jornada) + 'm³ de resíduos beneficiados.')
+        print('\t(b) Em uma hora de trabalho serão produzidos %5.3f m³ de resíduos beneficiados;' % volume_hora)
+        print('\t(c) Ao final de uma jornada de trabalho serão produzidos %5.2f m³ de resíduos beneficiados.' % volume_jornada)
+    
+    def producao_hora(self):
+        """Retorna a produção do britador em horas e numa jornada de trabalho."""
+        volume_hora = (self.producao/self.densidade)
+        return volume_hora
 
 print('\nDigite os dados para as leiras de resíduos BRUTOS:')
 quantidade_bruto = float(input('Digite a quantidade de leiras para armazenamento de RCD bruto:\n'))
@@ -60,21 +73,27 @@ jornada = float(input('Digite a jornada de trabalho do britador :\n'))
 
 
 leira_bruto = Leiras(quantidade_bruto, diametro_bruto, volume_bruto)
-print('\n\t\t\tANÁLISE DOS DADOS:')
-print(f'\nSerão utilizadas {quantidade_bruto} leiras para armazenamento de RCD bruto, com diâmetro de {diametro_bruto}m cada.\nPortanto:')
+print('\n----------------ANÁLISE DOS DADOS:----------------')
+print('\nSerão utilizadas %5.2f leiras para armazenamento de RCD bruto, com diâmetro de %5.3f m cada.\nPortanto:' % (quantidade_bruto, diametro_bruto))
 print('\n1 - Altura das Pilhas de Resíduos e Volume Total Armazenado (Material Bruto):')
-print('\t(b) Altura Máxima das Pilhas: ' + str(leira_bruto.altura_leiras()) + 'm;')
-print('\t(a) Capacidade de Armazenamento Total: ' + str(leira_bruto.volume_leiras()) + 'm³.')
+print('\t(b) Altura Máxima das Pilhas: %5.3f m;' % leira_bruto.altura_leiras())
+print('\t(a) Capacidade de Armazenamento Total: %5.3f m³;' % leira_bruto.volume_leiras())
 
 
 leira_beneficiado = Leiras(quantidade_beneficiado, diametro_beneficiado, volume_beneficiado)
-print(f'\nSerão utilizadas {quantidade_beneficiado} leiras para armazenamento de RCD beneficiado, com diâmetro de {diametro_beneficiado}m cada.\nPortanto:')
+print('\nSerão utilizadas %5.2f leiras para armazenamento de RCD beneficiado, com diâmetro de %5.3f m cada.\nPortanto:' % (quantidade_beneficiado, diametro_beneficiado))
 print('\n2 - Altura das Pilhas de Reciclados e Volume Total Armazenado (Material Beneficiado):')
-print('\t(b) Altura das Pilhas: ' + str(leira_beneficiado.altura_leiras()) + 'm;')
-print('\t(a) Volume Total: ' + str(leira_beneficiado.volume_leiras()) + 'm³.')
+print('\t(b) Altura das Pilhas: %5.3f m;' % leira_beneficiado.altura_leiras())
+print('\t(a) Volume Total: %5.3f m³.' % leira_beneficiado.volume_leiras())
 
-bruto_beneficiado = volume_beneficiado/volume_bruto
-print(f'\nA capacidade de armazenamento de RCD beneficiado é de {bruto_beneficiado} da capacidade do RCD bruto.')
+print('\n---- OBSERVAÇÕES:----')
+bruto_beneficiado = leira_beneficiado.volume_leiras()/leira_bruto.volume_leiras()
+print('\n\t(a) A capacidade de armazenamento de RCD beneficiado é %5.3f vezes a capacidade do RCD bruto.' % bruto_beneficiado)
 
 britador = Britador(producao, densidade, jornada)
 britador.producao_britador()
+
+producao_horaria = Britador(producao, densidade, jornada)
+x = leira_beneficiado.volume_leiras()/producao_horaria.producao_hora()
+
+print('\t(d) Em %5.2f horas todas as leiras de resíduos beneficados estarão preenchidas.\n' % x)
